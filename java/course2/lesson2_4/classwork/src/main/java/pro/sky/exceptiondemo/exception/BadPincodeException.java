@@ -1,4 +1,4 @@
-package pro.sky.exceptiondemo;
+package pro.sky.exceptiondemo.exception;
 
 public class BadPincodeException extends RuntimeException {
 
