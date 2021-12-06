@@ -20,16 +20,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee add(String firstName, String lastName) {
-        Employee employee;
         if (spareIndex >= 0) {
-            employee = new Employee(firstName, lastName);
+            Employee employee = new Employee(firstName, lastName);
             employees[spareIndex] = employee;
             spareIndex = findSpareIndex();
             return employee;
         }
         throw new ArrayEmployeesOverflowException();
-
-        // todo check repeating
     }
 
     @Override
