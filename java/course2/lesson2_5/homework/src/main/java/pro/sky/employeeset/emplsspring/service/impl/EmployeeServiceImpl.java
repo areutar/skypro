@@ -43,6 +43,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Set<Employee> getEmployeeSet() {
-        return employees;
+        return Set.copyOf(employees);
     }
 }
