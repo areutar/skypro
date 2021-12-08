@@ -16,7 +16,7 @@ public class StoreController {
     }
 
     @GetMapping(path = "/get/name-by-type")
-    public List<String> getProductNameByType(@RequestParam("type") String type) {
+    public List<String> getProductNamesByType(@RequestParam("type") String type) {
         return productService.getProductNamesByType(type);
     }
 
@@ -26,7 +26,7 @@ public class StoreController {
     }
 
     @GetMapping(path = "/get/count-by-type")
-    public int countProductsByType(@RequestParam("type") String type) {
+    public long countProductsByType(@RequestParam("type") String type) {
         return productService.countProductsByType(type);
     }
 
@@ -44,4 +44,23 @@ public class StoreController {
     public boolean containsProduct(@RequestParam("name") String name, @RequestParam("type") String type) {
         return productService.containsProduct(name, type);
     }
+
+    @GetMapping(path = "/get/product-with-string")
+    public List<String> getProductNamesByTypeWithString(@RequestParam String type,
+                                                        @RequestParam String string) {
+        return productService.getProductNamesByTypeWithString(type, string);
+    }
+
+    @GetMapping(path = "/patch/product")
+    public void changeNameByName(@RequestParam String forName,
+                                 @RequestParam String toName) {
+        productService.getProductNamesByTypeWithString(forName, toName);
+    }
+
+    @GetMapping(path = "/get/product")
+    public String getProductNameByType(@RequestParam("type") String type) {
+        return productService.getProductNameByType(type);
+    }
+
+
 }
