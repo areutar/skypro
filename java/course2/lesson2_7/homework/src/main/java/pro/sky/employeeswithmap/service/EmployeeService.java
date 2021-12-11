@@ -1,17 +1,15 @@
 package pro.sky.employeeswithmap.service;
 
 import pro.sky.employeeswithmap.data.Employee;
-import pro.sky.employeeswithmap.data.FullName;
 
-import java.util.Set;
+import java.util.Collection;
 
 public interface EmployeeService {
     Employee addEmployee(String firstName, String secondName, String lastName);
-    FullName addEmployeeF(String firstName, String secondName, String lastName);
 
     Employee getEmployee(String firstName, String secondName, String lastName);
 
     Employee removeEmployee(String firstName, String secondName, String lastName);
 
-    Set<FullName> getEmployeeNames();
+    Collection<Employee> getEmployees();
 }

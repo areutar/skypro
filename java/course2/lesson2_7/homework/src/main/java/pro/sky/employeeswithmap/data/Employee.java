@@ -3,10 +3,18 @@ package pro.sky.employeeswithmap.data;
 import java.util.Objects;
 
 public class Employee {
-    private FullName fullName;
+    private String firstName;
+    private String secondName;
+    private String lastName;
 
-    public Employee(FullName fullName) {
-        this.fullName = fullName;
+    public Employee(String firstName, String secondName, String lastName) {
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.lastName = lastName;
+    }
+
+    public String getKeyString() {
+        return firstName + '/' + secondName + '/' + lastName;
     }
 
     @Override
@@ -14,19 +22,35 @@ public class Employee {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-        return fullName.equals(employee.fullName);
+        return firstName.equals(employee.firstName) && Objects.equals(secondName, employee.secondName) && lastName.equals(employee.lastName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(fullName);
+        return Objects.hash(firstName, secondName, lastName);
     }
 
-    public FullName getFullName() {
-        return fullName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFullName(FullName fullName) {
-        this.fullName = fullName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }
