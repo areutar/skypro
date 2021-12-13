@@ -3,18 +3,14 @@ package pro.sky.employeeswithmap.data;
 import java.util.Objects;
 
 public class Employee {
-    private String firstName;
-    private String secondName;
-    private String lastName;
+    private final String firstName;
+    private final String secondName;
+    private final String lastName;
 
     public Employee(String firstName, String secondName, String lastName) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.lastName = lastName;
-    }
-
-    public String getKeyString() {
-        return firstName + '/' + secondName + '/' + lastName;
     }
 
     @Override
@@ -34,23 +30,13 @@ public class Employee {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
     public String getSecondName() {
         return secondName;
-    }
-
-    public void setSecondName(String secondName) {
-        this.secondName = secondName;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+
 }

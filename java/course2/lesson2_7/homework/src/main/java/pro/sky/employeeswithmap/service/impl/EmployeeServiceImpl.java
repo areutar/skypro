@@ -20,19 +20,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee addEmployee(String firstName, String secondName, String lastName) {
-        Employee employee = new Employee(firstName, secondName, lastName);
-        String key = employee.getKeyString();
+        String key = getKeyString(firstName, secondName, lastName);
         if (!employeeMap.containsKey(key)) {
+            Employee employee = new Employee(firstName, secondName, lastName);
             employeeMap.put(key, employee);
             return employee;
         }
         throw new DuplicateEmployeeException("Такой сотрудник уже есть.");
     }
 
+    private String getKeyString(String firstName, String secondName, String lastName) {
+        return firstName + '/' + secondName + '/' + lastName;
+
+    }
+
     @Override
     public Employee getEmployee(String firstName, String secondName, String lastName) {
-        Employee employee = new Employee(firstName, secondName, lastName);
-        String key = employee.getKeyString();
+        String key = getKeyString(firstName, secondName, lastName);
         if (employeeMap.containsKey(key)) {
             return employeeMap.get(key);
         }
@@ -41,11 +45,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee removeEmployee(String firstName, String secondName, String lastName) {
-        Employee employee = new Employee(firstName, secondName, lastName);
-        String key = employee.getKeyString();
+        String key = getKeyString(firstName, secondName, lastName);
         if (employeeMap.containsKey(key)) {
-            employeeMap.remove(key, employee);
-            return employee;
+            return employeeMap.remove(key);
         }
         throw new EmployeeNotFoundException();
     }
