@@ -5,11 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pro.sky.employeeswithstream.data.Employee;
-import pro.sky.employeeswithstream.data.FullName;
 import pro.sky.employeeswithstream.service.EmployeeService;
 
 import java.util.Collection;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/employee")
@@ -44,13 +42,8 @@ public class EmployeeController {
         return employeeService.getEmployee(firstName, secondName, lastName);
     }
 
-    @GetMapping("/employeeNames")
-    public Set<FullName> getEmployeeSet() {
-        return employeeService.getEmployeeNames();
-    }
-
-    @GetMapping("employees")
-    public Collection<Employee> getEmployeeNames() {
+    @GetMapping("/all")
+    public Collection<Employee> getEmployees() {
         return employeeService.getEmployees();
     }
 

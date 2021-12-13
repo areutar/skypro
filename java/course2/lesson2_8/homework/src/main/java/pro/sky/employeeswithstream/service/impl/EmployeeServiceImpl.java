@@ -2,7 +2,6 @@ package pro.sky.employeeswithstream.service.impl;
 
 import org.springframework.stereotype.Service;
 import pro.sky.employeeswithstream.data.Employee;
-import pro.sky.employeeswithstream.data.FullName;
 import pro.sky.employeeswithstream.exception.DuplicateEmployeeException;
 import pro.sky.employeeswithstream.exception.EmployeeNotFoundException;
 import pro.sky.employeeswithstream.service.EmployeeService;
@@ -11,7 +10,7 @@ import java.util.*;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-    private Map<FullName, Employee> employeeMap = new HashMap<>();
+    private Map<String, Employee> employeeMap = new HashMap<>();
 
     public EmployeeServiceImpl() {
         addEmployee("Василий", "Иванович", "Чапаев", 1, 200);
@@ -21,12 +20,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         addEmployee("Михаил", "Васильевич", "Фрунзе", 5, 200);
     }
 
+    private String getKeyString(String firstName, String secondName, String lastName) {
+        return firstName + '/' + secondName + '/' + lastName;
+
+    }
+
     @Override
     public Employee addEmployee(String firstName, String secondName, String lastName, int department, int salary) {
-        FullName fullName = new FullName(firstName, secondName, lastName);
-        if (!employeeMap.containsKey(fullName)) {
-            Employee employee = new Employee(fullName, department, salary);
-            employeeMap.put(fullName, employee);
+        String key = getKeyString(firstName, secondName, lastName);
+        if (!employeeMap.containsKey(key)) {
+            Employee employee = new Employee(firstName, secondName, lastName, department, salary);
+            employeeMap.put(key, employee);
             return employee;
         }
         throw new DuplicateEmployeeException("Такой сотрудник уже есть.");
@@ -34,27 +38,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee getEmployee(String firstName, String secondName, String lastName) {
-        FullName fullName = new FullName(firstName, secondName, lastName);
-        if (employeeMap.containsKey(fullName)) {
-            return employeeMap.get(fullName);
+        String key = getKeyString(firstName, secondName, lastName);
+        if (employeeMap.containsKey(key)) {
+            return employeeMap.get(key);
         }
         throw new EmployeeNotFoundException();
     }
 
     @Override
     public Employee removeEmployee(String firstName, String secondName, String lastName) {
-        FullName fullName = new FullName(firstName, secondName, lastName);
-        if (employeeMap.containsKey(fullName)) {
-            Employee employee = employeeMap.get(fullName);
-            employeeMap.remove(fullName, employee);
-            return employee;
+        String key = getKeyString(firstName, secondName, lastName);
+        if (employeeMap.containsKey(key)) {
+            return employeeMap.remove(key);
         }
         throw new EmployeeNotFoundException();
-    }
-
-    @Override
-    public Set<FullName> getEmployeeNames() {
-        return Collections.unmodifiableSet(employeeMap.keySet());
     }
 
     @Override
