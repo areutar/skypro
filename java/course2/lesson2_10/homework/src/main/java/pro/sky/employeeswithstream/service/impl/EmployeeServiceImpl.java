@@ -2,20 +2,22 @@ package pro.sky.employeeswithstream.service.impl;
 
 import org.springframework.stereotype.Service;
 import pro.sky.employeeswithstream.data.Employee;
-import pro.sky.employeeswithstream.data.FullName;
 import pro.sky.employeeswithstream.exception.DuplicateEmployeeException;
 import pro.sky.employeeswithstream.exception.EmployeeNotFoundException;
 import pro.sky.employeeswithstream.exception.IllegalNameException;
 import pro.sky.employeeswithstream.service.EmployeeService;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.apache.commons.lang3.StringUtils.isAlpha;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-    private Map<FullName, Employee> employeeMap = new HashMap<>();
+    private Map<String, Employee> employeeMap = new HashMap<>();
 
     public EmployeeServiceImpl() {
         addEmployee("Василий", "Иванович", "Чапаев", 1, 200);
@@ -25,32 +27,40 @@ public class EmployeeServiceImpl implements EmployeeService {
         addEmployee("Михаил", "Васильевич", "Фрунзе", 5, 200);
     }
 
-    @Override
-    public Employee addEmployee(String firstName, String secondName, String lastName,
-                                int department, int salary) {
-        checkAlpha(firstName, secondName, lastName);
-        FullName fullName = new FullName(capitalize(firstName), capitalize(secondName), capitalize(lastName));
-
-        if (!employeeMap.containsKey(fullName)) {
-            Employee employee = new Employee(fullName, department, salary);
-            employeeMap.put(fullName, employee);
-            return employee;
-        }
-        throw new DuplicateEmployeeException("Такой сотрудник уже есть.");
+    private String getKeyString(String firstName, String secondName, String lastName) {
+        return firstName + '/' + secondName + '/' + lastName;
     }
 
     private void checkAlpha(String firstName, String secondName, String lastName) {
-        if (!isAlpha(firstName)|| !isAlpha(secondName)|| !isAlpha(lastName)) {
+        if (!isAlpha(firstName) || !isAlpha(secondName) || !isAlpha(lastName)) {
             throw new IllegalNameException();
         }
     }
 
     @Override
+    public Employee addEmployee(String fName, String sName, String lName,
+                                int department, int salary) {
+        checkAlpha(fName, sName, lName);
+
+        String firstName = capitalize(fName);
+        String secondName = capitalize(sName);
+        String lastName = capitalize(lName);
+
+        String key = getKeyString(firstName, secondName, lastName);
+        if (!employeeMap.containsKey(key)) {
+            Employee employee = new Employee(firstName, secondName, lastName, department, salary);
+            employeeMap.put(key, employee);
+            return employee;
+        }
+        throw new DuplicateEmployeeException("Такой сотрудник уже есть.");
+    }
+
+    @Override
     public Employee getEmployee(String firstName, String secondName, String lastName) {
         checkAlpha(firstName, secondName, lastName);
-        FullName fullName = new FullName(firstName, secondName, lastName);
-        if (employeeMap.containsKey(fullName)) {
-            return employeeMap.get(fullName);
+        String key = getKeyString(firstName, secondName, lastName);
+        if (employeeMap.containsKey(key)) {
+            return employeeMap.get(key);
         }
         throw new EmployeeNotFoundException();
     }
@@ -58,19 +68,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee removeEmployee(String firstName, String secondName, String lastName) {
         checkAlpha(firstName, secondName, lastName);
-        FullName fullName = new FullName(firstName, secondName, lastName);
-        if (employeeMap.containsKey(fullName)) {
-            Employee employee = employeeMap.get(fullName);
-            employeeMap.remove(fullName, employee);
-            return employee;
+
+        String key = getKeyString(firstName, secondName, lastName);
+        if (employeeMap.containsKey(key)) {
+            return employeeMap.remove(key);
         }
         throw new EmployeeNotFoundException();
     }
 
-    @Override
-    public Set<FullName> getEmployeeNames() {
-        return Collections.unmodifiableSet(employeeMap.keySet());
-    }
 
     @Override
     public Collection<Employee> getEmployees() {

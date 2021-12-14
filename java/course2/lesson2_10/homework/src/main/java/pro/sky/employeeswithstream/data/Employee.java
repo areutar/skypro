@@ -3,34 +3,19 @@ package pro.sky.employeeswithstream.data;
 import java.util.Objects;
 
 public class Employee {
-    private FullName fullName;
-    private int department;
-    private int salary;
+    private final String firstName;
+    private final String secondName;
+    private final String lastName;
+    private final int department;
+    private final int salary;
 
-    public Employee(FullName fullName) {
-        this.fullName = fullName;
-    }
 
-    public Employee(FullName fullName, int department, int salary) {
-        this.fullName = fullName;
+    public Employee(String firstName, String secondName, String lastName, int department, int salary) {
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.lastName = lastName;
         this.department = department;
         this.salary = salary;
-    }
-
-    public int getSalary() {
-        return salary;
-    }
-
-    public void setSalary(int salary) {
-        this.salary = salary;
-    }
-
-    public int getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(int department) {
-        this.department = department;
     }
 
     @Override
@@ -38,19 +23,31 @@ public class Employee {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-        return fullName.equals(employee.fullName);
+        return firstName.equals(employee.firstName) && Objects.equals(secondName, employee.secondName) && lastName.equals(employee.lastName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(fullName);
+        return Objects.hash(firstName, secondName, lastName);
     }
 
-    public FullName getFullName() {
-        return fullName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFullName(FullName fullName) {
-        this.fullName = fullName;
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public int getDepartment() {
+        return department;
+    }
+
+    public int getSalary() {
+        return salary;
     }
 }
