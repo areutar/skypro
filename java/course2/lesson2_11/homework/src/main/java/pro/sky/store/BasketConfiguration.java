@@ -5,10 +5,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.annotation.SessionScope;
 
 @Configuration
-public class BasketConfigurator {
+public class BasketConfiguration {
     @Bean
     @SessionScope
     public Basket sessionBasket() {
         return new Basket();
     }
+
 }

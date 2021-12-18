@@ -2,17 +2,20 @@ package pro.sky.store;
 
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 @Service
 public class StoreServiceImpl implements StoreService {
-    @Resource (name = "sessionBasket")
-    Basket sessionBasket;
+    private final Basket sessionBasket;
+
+    public StoreServiceImpl(Basket sessionBasket) {
+        this.sessionBasket = sessionBasket;
+    }
+
 
     @Override
     public void add(List<Integer> ids) {
-        sessionBasket.getIds().addAll(ids);
+        sessionBasket.addIds(ids);
     }
 
     @Override

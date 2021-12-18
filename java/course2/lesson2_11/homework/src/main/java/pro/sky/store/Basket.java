@@ -1,14 +1,13 @@
 package pro.sky.store;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 public class Basket {
-
     private final List<Integer> ids = new ArrayList<>();
     private String name;
-
 
     @Override
     public boolean equals(Object o) {
@@ -23,8 +22,11 @@ public class Basket {
         return Objects.hash(name);
     }
 
-    public List<Integer> getIds() {
-        return ids;
+    public void addIds(List<Integer> ids) {
+        this.ids.addAll(ids);
     }
 
+    public List<Integer> getIds() {
+        return Collections.unmodifiableList(ids);
+    }
 }
