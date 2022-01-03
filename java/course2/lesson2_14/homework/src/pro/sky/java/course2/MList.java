@@ -1,7 +1,7 @@
 package pro.sky.java.course2;
 
 import pro.sky.java.course2.exceptions.MListIndexOutOfBoundsException;
-import pro.sky.java.course2.exceptions.MListNullPointerException;
+import pro.sky.java.course2.exceptions.NullArgumentException;
 import pro.sky.java.course2.exceptions.NoSuchElementException;
 
 import java.util.Arrays;
@@ -16,7 +16,6 @@ public class MList implements StringList {
     }
 
     public MList(int initialCapacity) {
-        size = 0;
         array = new String[initialCapacity];
     }
 
@@ -29,14 +28,13 @@ public class MList implements StringList {
     public String add(String item) {
         checkInputString(item);
         checkAndCorrectLength();
-        array[size] = item;
-        size++;
+        array[size++] = item;
         return item;
     }
 
     private void checkInputString(String item) {
         if (item == null) {
-            throw new MListNullPointerException();
+            throw new NullArgumentException();
         }
     }
 
@@ -86,8 +84,7 @@ public class MList implements StringList {
         checkIndex(index);
         String itemToRemove = array[index];
         System.arraycopy(array, index + 1, array, index, size - 1 - index);
-        array[size - 1] = null;
-        size--;
+        array[--size] = null;
         return itemToRemove;
     }
 
@@ -127,17 +124,13 @@ public class MList implements StringList {
     @Override
     public boolean equals(StringList otherList) {
         if (otherList == null) {
-            throw new MListNullPointerException();
+            throw new NullArgumentException();
         }
         if (size != otherList.size()) {
             return false;
         }
-        for (int i = 0; i < size; i++) {
-            if (!array[i].equals(otherList.get(i))) {
-                return false;
-            }
-        }
-        return true;
+
+        return Arrays.equals(otherList.toArray(), toArray());
     }
 
     @Override
@@ -152,9 +145,7 @@ public class MList implements StringList {
 
     @Override
     public void clear() {
-        for (int i = 0; i < size; i++) {
-            array[i] = null;
-        }
+        Arrays.fill(array, null);
         size = 0;
     }
 
