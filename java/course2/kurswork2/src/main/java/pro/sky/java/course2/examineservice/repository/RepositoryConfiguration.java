@@ -12,7 +12,6 @@ public class RepositoryConfiguration {
         return new QuestionRepositoryImpl();
     }
 
-
     @Bean
     public QuestionRepository mathQuestionRepository() {
         return new QuestionRepositoryImpl();

@@ -11,17 +11,10 @@ import java.util.Random;
 
 public class QuestionServiceImpl implements QuestionService {
     private final QuestionRepository questionRepository;
-    private final List<Question> questionList;
     private final Random random = new Random();
 
     public QuestionServiceImpl(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
-        questionList = new ArrayList<>();
-    }
-
-    public QuestionServiceImpl(QuestionRepository questionRepository, List<Question> questionList) {
-        this.questionRepository = questionRepository;
-        this.questionList = questionList;
     }
 
     @Override
@@ -41,8 +34,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Question getRandomQuestion() {
-        questionList.clear();
-        questionList.addAll(getAll());
+        List<Question> questionList = new ArrayList<>(getAll());
         return questionList.get(random.nextInt(questionList.size()));
     }
 

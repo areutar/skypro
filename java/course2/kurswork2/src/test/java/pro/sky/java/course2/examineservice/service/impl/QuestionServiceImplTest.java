@@ -8,8 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import pro.sky.java.course2.examineservice.repository.QuestionRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static pro.sky.java.course2.examineservice.constant.Constants.*;
 
 @ExtendWith(MockitoExtension.class)

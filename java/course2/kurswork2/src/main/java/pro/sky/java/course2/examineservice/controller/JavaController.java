@@ -20,8 +20,8 @@ public class JavaController {
     }
 
     @GetMapping("/add")
-    public Question add(@RequestParam String question,@RequestParam String answer) {
-       return questionService.add(new Question(question, answer));
+    public Question add(@RequestParam String question, @RequestParam String answer) {
+        return questionService.add(new Question(question, answer));
     }
 
     @GetMapping("/remove")

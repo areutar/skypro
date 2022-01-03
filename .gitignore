@@ -16,7 +16,7 @@ mvnw.cmd
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-
+*.plantuml
 ### STS ###
 .apt_generated
 .classpath

@@ -1,7 +1,5 @@
 package pro.sky.java.course2.examineservice.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import pro.sky.java.course2.examineservice.domain.Question;
 import pro.sky.java.course2.examineservice.exception.TooManyQuestionsRequestException;
@@ -19,9 +17,7 @@ public class ExaminerServiceImpl implements ExaminerService {
     private final QuestionService javaQuestionService;
     private final QuestionService mathQuestionService;
 
-    @Autowired
-    public ExaminerServiceImpl(@Qualifier("javaQuestionService") QuestionService javaQuestionService,
-                               @Qualifier("mathQuestionService") QuestionService mathQuestionService) {
+    public ExaminerServiceImpl(QuestionService javaQuestionService, QuestionService mathQuestionService) {
         this.javaQuestionService = javaQuestionService;
         this.mathQuestionService = mathQuestionService;
     }
