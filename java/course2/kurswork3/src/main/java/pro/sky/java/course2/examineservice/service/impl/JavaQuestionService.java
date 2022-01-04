@@ -15,10 +15,10 @@ public class JavaQuestionService implements QuestionService {
 
     public JavaQuestionService(QuestionRepository javaQuestionRepository) {
         this.javaQuestionRepository = javaQuestionRepository;
-//        initQuestions();
+        initQuestions();
     }
 
-    @PostConstruct
+//    @PostConstruct
     private void initQuestions() {
         for (int i = 0; i < 6; i++) {
             javaQuestionRepository.add(new Question("javaQuestion" + i, "javaAnswer" + i));

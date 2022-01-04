@@ -29,7 +29,9 @@ public class MathQuestionService implements QuestionService {
 
     @Override
     public Question getRandomQuestion() {
-        int r = random.nextInt(10);
-        return new Question("Math +" + r, String.valueOf(r));
+        int sum = 1 + random.nextInt(20);
+        int term1 = random.nextInt(sum);
+        int term2 = sum - term1;
+        return new Question(term1 + " + " + term2 + " = ", String.valueOf(sum));
     }
 }
