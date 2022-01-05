@@ -41,11 +41,12 @@ class JavaQuestionRepositoryTest {
     @Test
     void shouldThrowExceptionWhenQuestionNotFound() {
         out.add(J_QUEST1);
-        assertThrows(QuestionNotFoundException.class, () -> out.remove(new Question(JAVA_QUESTION1, JAVA_ANSWER2)));
+        assertThrows(QuestionNotFoundException.class, () ->
+                out.remove(new Question(JAVA_QUESTION1, JAVA_ANSWER2)));
     }
 
     @Test
-    void getAll() {
+    void shouldReturnCollectionEqualsToTestingSet() {
         out.add(J_QUEST1);
         out.add(J_QUEST2);
         out.add(J_QUEST3);
