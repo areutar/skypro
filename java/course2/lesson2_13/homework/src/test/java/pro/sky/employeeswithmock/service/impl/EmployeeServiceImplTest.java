@@ -13,7 +13,6 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static pro.sky.employeeswithmock.service.impl.constant.Constants.*;
-import static pro.sky.employeeswithmock.service.impl.constant.Constants.*;
 
 
 class EmployeeServiceImplTest {
