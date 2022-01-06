@@ -40,11 +40,12 @@ class JavaQuestionServiceTest {
     @Test
     void shouldThrowExceptionWhenQuestionNotFound() {
         out.add(QUEST1);
-        assertThrows(QuestionNotFoundException.class, () -> out.remove(new Question(QUESTION1, ANSWER2)));
+        Question notFoundQuestion = new Question(QUESTION1, ANSWER2);
+        assertThrows(QuestionNotFoundException.class, () -> out.remove(notFoundQuestion));
     }
 
     @Test
-    void getAll() {
+    void shouldReturnTestingSetWhenGetAll() {
         out.add(QUEST1);
         out.add(QUEST2);
         out.add(QUEST3);

@@ -38,7 +38,7 @@ class ExaminerServiceImplTest {
         when(javaQuestionService.getAll()).thenReturn(ALL_QUESTIONS_SET);
         when(javaQuestionService.getRandomQuestion()).
                 thenReturn(QUEST1).thenReturn(QUEST2).thenReturn(QUEST3).thenReturn(QUEST4);
-        assertEquals(examinerService.getQuestions(3).size(), 3);
+        assertEquals(3, examinerService.getQuestions(3).size());
     }
 
 }

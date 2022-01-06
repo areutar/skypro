@@ -6,20 +6,15 @@ import pro.sky.java.course2.examineservice.exception.DuplicateQuestionException;
 import pro.sky.java.course2.examineservice.exception.QuestionNotFoundException;
 import pro.sky.java.course2.examineservice.service.QuestionService;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Service
 public class JavaQuestionService implements QuestionService {
-    private final Set<Question> questions;
-    private final List<Question> questionList = new ArrayList<>();
+    private final Set<Question> questions = new HashSet<>();
     private final Random random = new Random();
 
-
-    public JavaQuestionService() {
-        questions = new HashSet<>();
-//        initQuestions();
-    }
-
+    @PostConstruct
     private void initQuestions() {
         for (int i = 0; i < 6; i++) {
             questions.add(new Question("question" + i, "answer" + i));
@@ -48,14 +43,8 @@ public class JavaQuestionService implements QuestionService {
     }
 
     @Override
-    public Question add(String question, String answer) {
-        return null;
-    }
-
-    @Override
     public Question getRandomQuestion() {
-        questionList.clear();
-        questionList.addAll(questions);
+        List<Question> questionList = new ArrayList<>(getAll());
         return questionList.get(random.nextInt(questions.size()));
     }
 
