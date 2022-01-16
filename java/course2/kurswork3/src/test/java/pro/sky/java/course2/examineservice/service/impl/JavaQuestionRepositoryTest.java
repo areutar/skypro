@@ -11,11 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static pro.sky.java.course2.examineservice.constant.Constants.*;
 
 class JavaQuestionRepositoryTest {
-    private final JavaQuestionRepository out;
-
-    JavaQuestionRepositoryTest() {
-        out = new JavaQuestionRepository();
-    }
+    private final JavaQuestionRepository out = new JavaQuestionRepository();
 
     @Test
     void shouldCorrectAddQuestion() {

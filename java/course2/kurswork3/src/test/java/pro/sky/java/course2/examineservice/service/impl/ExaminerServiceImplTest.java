@@ -28,9 +28,9 @@ class ExaminerServiceImplTest {
     void init() {
         examinerService = new ExaminerServiceImpl(List.of(javaQuestionService, mathQuestionService));
         when(javaQuestionService.getRandomQuestion()).
-                thenReturn(J_QUEST1).thenReturn(J_QUEST2).thenReturn(J_QUEST3).thenReturn(J_QUEST4);
+                thenReturn(J_QUEST1, J_QUEST2, J_QUEST3, J_QUEST4);
         when(mathQuestionService.getRandomQuestion()).
-                thenReturn(M_QUEST1).thenReturn(M_QUEST2).thenReturn(M_QUEST3).thenReturn(M_QUEST4);
+                thenReturn(M_QUEST1, M_QUEST2, M_QUEST3, M_QUEST4);
     }
 
     @Test
