@@ -6,32 +6,27 @@ import pro.sky.java.course2.examineservice.exception.TooManyQuestionsRequestExce
 import pro.sky.java.course2.examineservice.service.ExaminerService;
 import pro.sky.java.course2.examineservice.service.QuestionService;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ExaminerServiceImpl implements ExaminerService {
     private final Random random = new Random();
-    private final QuestionService javaQuestionService;
-    private final QuestionService mathQuestionService;
+    private final List<QuestionService> questionServices;
 
-    public ExaminerServiceImpl(QuestionService javaQuestionService, QuestionService mathQuestionService) {
-        this.javaQuestionService = javaQuestionService;
-        this.mathQuestionService = mathQuestionService;
+    public ExaminerServiceImpl(List<QuestionService> questionServices) {
+        this.questionServices = questionServices;
     }
 
     @Override
     public Collection<Question> getQuestions(int amount) {
-        if (amount > javaQuestionService.getAll().size() + mathQuestionService.getAll().size()) {
+        if (amount > questionServices.get(0).getAll().size() +
+                questionServices.get(1).getAll().size()) {
             throw new TooManyQuestionsRequestException();
         }
+
         Set<Question> questions = new HashSet<>();
         while (questions.size() < amount) {
-            questions.add(random.nextBoolean() ?
-                    mathQuestionService.getRandomQuestion() :
-                    javaQuestionService.getRandomQuestion());
+            questions.add(questionServices.get(random.nextInt(2)).getRandomQuestion());
         }
         return questions;
     }

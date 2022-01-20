@@ -9,6 +9,8 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import pro.sky.java.course2.examineservice.exception.TooManyQuestionsRequestException;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static pro.sky.java.course2.examineservice.constant.Constants.*;
@@ -26,7 +28,7 @@ class ExaminerServiceImplTest {
 
     @BeforeEach
     void init() {
-        examinerService = new ExaminerServiceImpl(javaQuestionService, mathQuestionService);
+        examinerService = new ExaminerServiceImpl(List.of(javaQuestionService, mathQuestionService));
         when(javaQuestionService.getAll()).thenReturn(JAVA_QUESTIONS_SET);
         when(mathQuestionService.getAll()).thenReturn(MATH_QUESTIONS_SET);
     }
@@ -43,7 +45,7 @@ class ExaminerServiceImplTest {
                 thenReturn(J_QUEST1).thenReturn(J_QUEST2).thenReturn(J_QUEST3).thenReturn(J_QUEST4);
         when(mathQuestionService.getRandomQuestion()).
                 thenReturn(M_QUEST1).thenReturn(M_QUEST2).thenReturn(M_QUEST3).thenReturn(M_QUEST4);
-        assertTrue(ALL_QUESTIONS_SET.containsAll(examinerService.getQuestions(4)));
+        assertTrue(ALL_QUESTIONS_SET.containsAll(examinerService.getQuestions(7)));
     }
 
     @Test
@@ -52,6 +54,6 @@ class ExaminerServiceImplTest {
                 thenReturn(J_QUEST1).thenReturn(J_QUEST2).thenReturn(J_QUEST3).thenReturn(J_QUEST4);
         when(mathQuestionService.getRandomQuestion()).
                 thenReturn(M_QUEST1).thenReturn(M_QUEST2).thenReturn(M_QUEST3).thenReturn(M_QUEST4);
-        assertEquals(3, examinerService.getQuestions(3).size());
+        assertEquals(6, examinerService.getQuestions(6).size());
     }
 }
