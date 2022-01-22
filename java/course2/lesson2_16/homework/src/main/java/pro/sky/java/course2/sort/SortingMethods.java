@@ -5,14 +5,16 @@ import pro.sky.java.course2.MList;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-public class SortingMethods {
-    private void swap(MList mList, int i, int j) {
+public final class SortingMethods {
+    private SortingMethods() {
+    }
+    private static void swap(MList mList, int i, int j) {
         Integer item = mList.get(i);
         mList.set(i, mList.get(j));
         mList.set(j, item);
     }
 
-    public MList selectionSort(MList mList) {
+    public static MList selectionSort(MList mList) {
         for (int i = 0; i < mList.size(); i++) {
             int currentMinIndex = i;
             for (int j = i + 1; j < mList.size(); j++) {
@@ -27,7 +29,7 @@ public class SortingMethods {
         return mList;
     }
 
-    public MList bubbleSort(MList mList) {
+    public static MList bubbleSort(MList mList) {
         for (int i = 0; i < mList.size() - 1; i++) {
             for (int j = 0; j < mList.size() - 1 - i; j++) {
                 if (mList.get(j) > mList.get(j + 1)) {
@@ -38,7 +40,7 @@ public class SortingMethods {
         return mList;
     }
 
-    public MList insertionSort(MList mList) {
+    public static MList insertionSort(MList mList) {
         for (int i = 1; i < mList.size(); i++) {
             for (int j = i; j > 0 && mList.get(j - 1) > mList.get(j); j--) {
                 swap(mList, j - 1, j);
@@ -47,7 +49,7 @@ public class SortingMethods {
         return mList;
     }
 
-    public MList quickSort(MList mList) {
+    public static MList quickSort(MList mList) {
         Deque<Integer> stack = new ArrayDeque<>();
         stack.push(0);
         stack.push(mList.size());
@@ -71,7 +73,7 @@ public class SortingMethods {
         return mList;
     }
 
-    private int partition(MList mList, int position, int start, int end) {
+    private static int partition(MList mList, int position, int start, int end) {
         int l = start;
         int h = end - 2;
         int pivot = mList.get(position);

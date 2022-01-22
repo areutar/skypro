@@ -8,9 +8,10 @@ import pro.sky.java.course2.MList;
 import java.util.Arrays;
 import java.util.Random;
 
+import static pro.sky.java.course2.sort.SortingMethods.*;
+
 
 class SortingMethodsTest {
-    SortingMethods sortingMethods = new SortingMethods();
     MList mList = new MList();
     Random random = new Random();
     private static final int BIG_SIZE = 10_000;
@@ -29,9 +30,9 @@ class SortingMethodsTest {
     }
 
     @Test
-    void selectionSort() {
+    void selectionSortTest() {
         long start = System.currentTimeMillis();
-        MList sortedMList = sortingMethods.selectionSort(mList);
+        MList sortedMList = selectionSort(mList);
 
         System.out.println("selectionSort");
         System.out.println(System.currentTimeMillis() - start);
@@ -42,9 +43,9 @@ class SortingMethodsTest {
     }
 
     @Test
-    void bubbleSort() {
+    void bubbleSortTest() {
         long start = System.currentTimeMillis();
-        MList sortedMList = sortingMethods.bubbleSort(mList);
+        MList sortedMList = bubbleSort(mList);
 
         System.out.println("bubbleSort");
         System.out.println(System.currentTimeMillis() - start);
@@ -55,9 +56,9 @@ class SortingMethodsTest {
     }
 
     @Test
-    void insertionSort() {
+    void insertionSortTest() {
         long start = System.currentTimeMillis();
-        MList sortedMList = sortingMethods.insertionSort(mList);
+        MList sortedMList = insertionSort(mList);
 
         System.out.println("insertionSort");
         System.out.println(System.currentTimeMillis() - start);
@@ -68,9 +69,9 @@ class SortingMethodsTest {
     }
 
     @Test
-    void quickSort() {
+    void quickSortTest() {
         long start = System.currentTimeMillis();
-        MList sortedMList = sortingMethods.quickSort(mList);
+        MList sortedMList = quickSort(mList);
 
         System.out.println("quickSort");
         System.out.println(System.currentTimeMillis() - start);
