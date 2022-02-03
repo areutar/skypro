@@ -1,11 +1,15 @@
 package ru.hogwarts.school.service;
 
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.exception.NotFoundException;
+import ru.hogwarts.school.exception.UnableToCreateException;
+import ru.hogwarts.school.exception.UnableToDeleteException;
+import ru.hogwarts.school.exception.UnableToUpdateException;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Service
 public class StudentService {
@@ -16,19 +20,35 @@ public class StudentService {
     }
 
     public Student createStudent(Student student) {
-        return repository.save(student);
+        try {
+            return repository.save(student);
+        } catch (RuntimeException e) {
+            throw new UnableToCreateException();
+        }
     }
 
     public Student findStudent(long id) {
-        return repository.findById(id);
+        Optional<Student> optionalStudent = repository.findById(id);
+        if (optionalStudent.isEmpty()) {
+            throw new NotFoundException();
+        }
+        return optionalStudent.get();
     }
 
     public Student editStudent(Student student) {
-        return repository.save(student);
+        try {
+            return repository.save(student);
+        } catch (RuntimeException e) {
+            throw new UnableToUpdateException();
+        }
     }
 
-    public Student deleteStudent(long id) {
-        return repository.deleteById(id);
+    public void deleteStudent(long id) {
+        try {
+            repository.deleteById(id);
+        } catch (RuntimeException e) {
+            throw new UnableToDeleteException();
+        }
     }
 
     public Collection<Student> getAllStudents() {

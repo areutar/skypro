@@ -1,11 +1,16 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.exception.NotFoundException;
+import ru.hogwarts.school.exception.UnableToCreateException;
+import ru.hogwarts.school.exception.UnableToDeleteException;
+import ru.hogwarts.school.exception.UnableToUpdateException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FacultyService {
@@ -16,19 +21,35 @@ public class FacultyService {
     }
 
     public Faculty createFaculty(Faculty faculty) {
-        return repository.save(faculty);
+        try {
+            return repository.save(faculty);
+        } catch (RuntimeException e) {
+            throw new UnableToCreateException();
+        }
     }
 
     public Faculty findFaculty(long id) {
-        return repository.findById(id);
+        Optional<Faculty> optionalFaculty = repository.findById(id);
+        if (optionalFaculty.isEmpty()) {
+            throw new NotFoundException();
+        }
+        return optionalFaculty.get();
     }
 
     public Faculty editFaculty(Faculty faculty) {
-        return repository.save(faculty);
+        try {
+            return repository.save(faculty);
+        } catch (RuntimeException e) {
+            throw new UnableToUpdateException();
+        }
     }
 
-    public Faculty deleteFaculty(long id) {
-        return repository.deleteById(id);
+    public void deleteFaculty(long id) {
+        try {
+            repository.deleteById(id);
+        } catch (RuntimeException e) {
+            throw new UnableToDeleteException();
+        }
     }
 
     public Collection<Faculty> getAllFaculties() {
