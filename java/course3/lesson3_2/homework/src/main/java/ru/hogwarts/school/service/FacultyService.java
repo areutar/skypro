@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -35,7 +36,7 @@ public class FacultyService {
     }
 
     public Collection<Faculty> getAllFaculties() {
-        return faculties.values();
+        return Collections.unmodifiableCollection(faculties.values());
     }
 
     public Collection<Faculty> filterFacultiesByColor(String color) {
