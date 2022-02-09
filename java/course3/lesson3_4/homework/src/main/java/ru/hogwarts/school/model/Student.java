@@ -5,6 +5,7 @@ import java.util.Objects;
 
 @Entity
 public class Student {
+
     @Id
     @GeneratedValue
     private Long id;

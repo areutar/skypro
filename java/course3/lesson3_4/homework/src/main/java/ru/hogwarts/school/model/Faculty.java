@@ -6,6 +6,7 @@ import java.util.Set;
 
 @Entity
 public class Faculty {
+
     @Id
     @GeneratedValue
     private long id;

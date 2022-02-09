@@ -16,4 +16,3 @@ where student.age < student.id;
 select *
 from student
 order by student.age;
-
