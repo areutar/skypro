@@ -5,4 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class UnableToDeleteException extends RuntimeException {
+    public UnableToDeleteException(Throwable cause) {
+        super(cause);
+    }
 }

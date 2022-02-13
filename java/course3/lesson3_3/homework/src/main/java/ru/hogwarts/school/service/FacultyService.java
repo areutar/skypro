@@ -24,7 +24,7 @@ public class FacultyService {
         try {
             return repository.save(faculty);
         } catch (RuntimeException e) {
-            throw new UnableToCreateException();
+            throw new UnableToCreateException(e);
         }
     }
 
@@ -40,7 +40,7 @@ public class FacultyService {
         try {
             return repository.save(faculty);
         } catch (RuntimeException e) {
-            throw new UnableToUpdateException();
+            throw new UnableToUpdateException(e);
         }
     }
 
@@ -48,7 +48,7 @@ public class FacultyService {
         try {
             repository.deleteById(id);
         } catch (RuntimeException e) {
-            throw new UnableToDeleteException();
+            throw new UnableToDeleteException(e);
         }
     }
 
