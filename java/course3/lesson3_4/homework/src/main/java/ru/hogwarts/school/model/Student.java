@@ -1,15 +1,18 @@
 package ru.hogwarts.school.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.Objects;
 
 @Entity
 public class Student {
-
     @Id
     @GeneratedValue
     private Long id;
     private String name;
+    @Min(9)
+    @Max(65)
     private int age;
 
     @ManyToOne
@@ -54,11 +57,11 @@ public class Student {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        return age == student.age && Objects.equals(id, student.id) && Objects.equals(name, student.name);
+        return id.equals(student.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, age);
+        return Objects.hash(id);
     }
 }

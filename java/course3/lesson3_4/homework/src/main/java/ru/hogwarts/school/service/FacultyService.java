@@ -1,68 +1,19 @@
 package ru.hogwarts.school.service;
 
-import org.springframework.stereotype.Service;
-import ru.hogwarts.school.exception.*;
 import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.Collection;
-import java.util.Optional;
 
-@Service
-public class FacultyService {
+public interface FacultyService {
+    Faculty createFaculty(Faculty faculty);
 
-    private final FacultyRepository repository;
+    Faculty findFaculty(long id);
 
-    public FacultyService(FacultyRepository repository) {
-        this.repository = repository;
-    }
+    Faculty editFaculty(Faculty faculty);
 
-    public Faculty createFaculty(Faculty faculty) {
-        try {
-            return repository.save(faculty);
-        } catch (RuntimeException e) {
-            throw new UnableToCreateException();
-        }
-    }
+    void deleteFaculty(long id);
 
-    public Faculty findFaculty(long id) {
-        Optional<Faculty> optionalFaculty = repository.findById(id);
-        if (optionalFaculty.isEmpty()) {
-            throw new NotFoundException();
-        }
-        return optionalFaculty.get();
-    }
+    Collection<Faculty> getAllFaculties();
 
-    public Faculty editFaculty(Faculty faculty) {
-        try {
-            return repository.save(faculty);
-        } catch (RuntimeException e) {
-            throw new UnableToUpdateException();
-        }
-    }
-
-    public void deleteFaculty(long id) {
-        try {
-            repository.deleteById(id);
-        } catch (RuntimeException e) {
-            throw new UnableToDeleteException();
-        }
-    }
-
-    public Collection<Faculty> getAllFaculties() {
-        return repository.findAll();
-    }
-
-    public Collection<Faculty> findByColorOrName(String color, String name) {
-        if (color == null && name == null) {
-            throw new BadRequestException();
-        }
-        Collection<Faculty> faculties =
-                repository.findFacultiesByColorIgnoreCaseOrNameIgnoreCase(color, name);
-        if (faculties.isEmpty()) {
-            throw new NotFoundException();
-        }
-        return faculties;
-    }
-
+    Collection<Faculty> findByColorOrName(String color, String name);
 }
