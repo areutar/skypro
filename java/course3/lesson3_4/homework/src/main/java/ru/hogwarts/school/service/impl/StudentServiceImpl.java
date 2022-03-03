@@ -8,17 +8,12 @@ import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import static ru.hogwarts.school.exception.ApiException.UNABLE_TO_CREATE;
-import static ru.hogwarts.school.exception.ApiException.UNABLE_TO_UPDATE;
+import static ru.hogwarts.school.exception.ApiException.*;
 
 @Service
 public class StudentServiceImpl implements StudentService {
-
     private final StudentRepository repository;
-    private final Logger logger = Logger.getLogger(String.valueOf(StudentServiceImpl.class));
 
     public StudentServiceImpl(StudentRepository repository) {
         this.repository = repository;
@@ -29,7 +24,6 @@ public class StudentServiceImpl implements StudentService {
         try {
             return repository.save(student);
         } catch (RuntimeException e) {
-            logger.log(Level.SEVERE, e.getMessage());
             throw new UnableToCreateException(UNABLE_TO_CREATE, e);
         }
     }
@@ -39,8 +33,7 @@ public class StudentServiceImpl implements StudentService {
         try {
             return repository.save(student);
         } catch (RuntimeException e) {
-            logger.log(Level.SEVERE, e.getMessage());
-            throw new UnableToUpdateException(UNABLE_TO_UPDATE);
+            throw new UnableToUpdateException(UNABLE_TO_UPDATE, e);
         }
     }
 
@@ -49,8 +42,7 @@ public class StudentServiceImpl implements StudentService {
         try {
             repository.deleteById(id);
         } catch (RuntimeException e) {
-            logger.log(Level.SEVERE, e.getMessage());
-            throw new UnableToDeleteException(String.format("Unable to delete student with id %d!", id));
+            throw new UnableToDeleteException("Student", "id", id);
         }
     }
 
@@ -58,7 +50,7 @@ public class StudentServiceImpl implements StudentService {
     public Student findStudent(long id) {
         Optional<Student> optionalStudent = repository.findById(id);
         if (optionalStudent.isEmpty()) {
-            throw new NotFoundException(String.format("Not found student with id %d!", id));
+            throw new NotFoundException("Student", "id", id);
         }
         return optionalStudent.get();
     }
@@ -74,10 +66,10 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Collection<Student> findByAgeBetween(int age1, int age2) {
-        if (age2 < age1) {
-            throw new BadRequestException("The second age value must be no less than the first!");
+    public Collection<Student> findByAgeBetween(int min, int max) {
+        if (max < min) {
+            throw new BadRequestException(FIRST_AGE_MORE_THAN_SECOND_ERROR);
         }
-        return repository.findByAgeBetween(age1, age2);
+        return repository.findByAgeBetween(min, max);
     }
 }

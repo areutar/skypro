@@ -3,14 +3,19 @@ package ru.hogwarts.school.model;
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 
 @Entity
 public class Student {
     @Id
     @GeneratedValue
+    @Min(0)
     private Long id;
+
+    @Size(min=2, max=30)
     private String name;
+
     @Min(9)
     @Max(65)
     private int age;
@@ -18,6 +23,14 @@ public class Student {
     @ManyToOne
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
+
+    public Faculty getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(Faculty faculty) {
+        this.faculty = faculty;
+    }
 
     public Long getId() {
         return id;
