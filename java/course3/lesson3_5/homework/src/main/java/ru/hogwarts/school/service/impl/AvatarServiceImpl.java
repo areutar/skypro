@@ -1,8 +1,10 @@
 package ru.hogwarts.school.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.hogwarts.school.dto.StudentDto;
 import ru.hogwarts.school.exception.ApiException;
 import ru.hogwarts.school.exception.NotFoundException;
 import ru.hogwarts.school.exception.UnableToCreateException;
@@ -10,6 +12,7 @@ import ru.hogwarts.school.exception.UnableToUploadFileException;
 import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.AvatarRepository;
+import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.AvatarService;
 import ru.hogwarts.school.service.StudentService;
 
@@ -20,29 +23,27 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class AvatarServiceImpl implements AvatarService {
     @Value("${avatars.folder}")
     private String avatarsDir;
     private final AvatarRepository avatarRepository;
+    private final StudentRepository studentRepository;
     private final StudentService studentService;
-
-    public AvatarServiceImpl(AvatarRepository avatarRepository, StudentService studentService) {
-        this.avatarRepository = avatarRepository;
-        this.studentService = studentService;
-    }
 
     @Override
     public void uploadAvatar(Long studentId, MultipartFile avatarFile) {
-        Student student = studentService.findStudent(studentId);
+        StudentDto student = studentService.findStudent(studentId);
         Path newPath = getNewPath(avatarFile, student);
         copyFile(avatarFile, newPath);
-        fillAndSaveAvatar(avatarFile, student, newPath);
+        fillAndSaveAvatar(avatarFile, studentId, newPath);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class AvatarServiceImpl implements AvatarService {
         return avatar;
     }
 
-    private Path getNewPath(MultipartFile avatarFile, Student student) {
+    private Path getNewPath(MultipartFile avatarFile, StudentDto student) {
         Path filePath;
         try {
             filePath = Path.of(avatarsDir, student + "." +
@@ -85,8 +86,9 @@ public class AvatarServiceImpl implements AvatarService {
         }
     }
 
-    private void fillAndSaveAvatar(MultipartFile avatarFile, Student student, Path filePath) {
-        Avatar avatar = findAvatar(student.getId());
+    private void fillAndSaveAvatar(MultipartFile avatarFile, Long studentId, Path filePath) {
+        Avatar avatar = findAvatar(studentId);
+        Student student = studentRepository.findById(studentId).get();
         avatar.setStudent(student);
         avatar.setFilePath(filePath.toString());
         avatar.setFileSize(avatarFile.getSize());
@@ -102,5 +104,10 @@ public class AvatarServiceImpl implements AvatarService {
 
     private String getExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
+    }
+
+    @Override
+    public List<Avatar> getAllAvatars() {
+        return avatarRepository.findAll();
     }
 }

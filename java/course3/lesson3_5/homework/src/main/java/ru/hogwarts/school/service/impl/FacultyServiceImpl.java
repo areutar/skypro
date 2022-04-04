@@ -1,5 +1,6 @@
 package ru.hogwarts.school.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.*;
 import ru.hogwarts.school.model.Faculty;
@@ -12,12 +13,9 @@ import java.util.Optional;
 import static ru.hogwarts.school.exception.ApiException.*;
 
 @Service
+@RequiredArgsConstructor
 public class FacultyServiceImpl implements FacultyService {
     private final FacultyRepository repository;
-
-    public FacultyServiceImpl(FacultyRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public Faculty createFaculty(Faculty faculty) {

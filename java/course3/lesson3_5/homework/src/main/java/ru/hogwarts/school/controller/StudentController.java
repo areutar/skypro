@@ -1,34 +1,32 @@
 package ru.hogwarts.school.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.dto.StudentDto;
 import ru.hogwarts.school.service.StudentService;
 
 import javax.validation.Valid;
-import java.util.Collection;
+import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/student")
 public class StudentController {
     private final StudentService studentService;
 
-    public StudentController(StudentService studentService) {
-        this.studentService = studentService;
-    }
-
     @PostMapping
-    public Student createStudent(@Valid @RequestBody Student student) {
-        return studentService.createStudent(student);
+    public StudentDto createStudent(@Valid @RequestBody StudentDto studentDto) {
+        return studentService.createStudent(studentDto);
     }
 
     @PutMapping
-    public Student editStudent(@Valid @RequestBody Student student) {
-        return studentService.editStudent(student);
+    public StudentDto editStudent(@Valid @RequestBody StudentDto studentDto) {
+        return studentService.editStudent(studentDto);
     }
 
     @GetMapping("/{id}")
-    public Student getStudentInfo(@PathVariable Long id) {
+    public StudentDto getStudentInfo(@PathVariable Long id) {
         return studentService.findStudent(id);
     }
 
@@ -39,17 +37,17 @@ public class StudentController {
     }
 
     @GetMapping // http://localhost:8080/student
-    public Collection<Student> getAll() {
+    public List<StudentDto> getAll() {
         return studentService.getAllStudents();
     }
 
     @GetMapping("/age/{age}")
-    public Collection<Student> findStudentsByAge(@PathVariable int age) {
+    public List<StudentDto> findStudentsByAge(@PathVariable int age) {
         return studentService.findByAge(age);
     }
 
     @GetMapping("/age")
-    public Collection<Student> findStudentsByAge(@RequestParam int min, @RequestParam int max) {
+    public List<StudentDto> findStudentsByAge(@RequestParam int min, @RequestParam int max) {
         return studentService.findByAgeBetween(min, max);
     }
 }

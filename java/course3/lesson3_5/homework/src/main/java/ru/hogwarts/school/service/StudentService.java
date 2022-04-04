@@ -1,21 +1,21 @@
 package ru.hogwarts.school.service;
 
-import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.dto.StudentDto;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface StudentService {
-    Student createStudent(Student student);
+    StudentDto createStudent(StudentDto studentDto);
 
-    Student findStudent(long id);
+    StudentDto findStudent(long id);
 
-    Student editStudent(Student student);
+    StudentDto editStudent(StudentDto studentDto);
 
     void deleteStudent(long id);
 
-    Collection<Student> getAllStudents();
+    List<StudentDto> getAllStudents();
 
-    Collection<Student> findByAge(int age);
+    List<StudentDto> findByAge(int age);
 
-    Collection<Student> findByAgeBetween(int age1, int age2);
+    List<StudentDto> findByAgeBetween(int age1, int age2);
 }

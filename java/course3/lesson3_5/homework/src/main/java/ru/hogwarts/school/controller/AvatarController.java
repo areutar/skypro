@@ -1,5 +1,6 @@
 package ru.hogwarts.school.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,15 +16,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 @RestController
-@RequestMapping()
+@RequestMapping
+@RequiredArgsConstructor
 public class AvatarController {
     private final AvatarService avatarService;
-
-    public AvatarController(AvatarService avatarService) {
-        this.avatarService = avatarService;
-    }
 
     @PostMapping(value = "/{studentId}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadAvatar(@PathVariable Long studentId,
@@ -64,7 +63,6 @@ public class AvatarController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentLength(avatar.getFileSize());
         headers.setContentType(MediaType.parseMediaType(avatar.getMediaType()));
-//        headers.setCacheControl(CacheControl.noCache().getHeaderValue());
 
         Path path = Path.of(avatar.getFilePath());
         byte[] media;
@@ -74,6 +72,11 @@ public class AvatarController {
         } catch (IOException e) {
             return new ResponseEntity<>(e.getMessage(), headers, HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping(value = "/avatars")
+    public List<Avatar> getAllAvatars() {
+        return avatarService.getAllAvatars();
     }
 
 }
