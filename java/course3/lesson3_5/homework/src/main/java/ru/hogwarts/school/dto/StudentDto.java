@@ -1,18 +1,25 @@
 package ru.hogwarts.school.dto;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
+@Getter
+@Setter
 @EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor
 public class StudentDto {
     private Long id;
     private String name;
+    @Min(9)
+    @Max(65)
     private int age;
-    //    @JsonProperty("faculty")
     private String faculty;
+    private Long avatar;
 
     @Override
     public String toString() {

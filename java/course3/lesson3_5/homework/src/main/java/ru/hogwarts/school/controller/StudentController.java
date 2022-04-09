@@ -20,6 +20,12 @@ public class StudentController {
         return studentService.createStudent(studentDto);
     }
 
+    @PostMapping("/{faculty_id}")
+    public StudentDto addStudentToFaculty(@Valid @RequestBody StudentDto studentDto,
+                                          @PathVariable Long faculty_id) {
+        return studentService.addStudentToFaculty(studentDto, faculty_id);
+    }
+
     @PutMapping
     public StudentDto editStudent(@Valid @RequestBody StudentDto studentDto) {
         return studentService.editStudent(studentDto);
@@ -32,7 +38,7 @@ public class StudentController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
-        studentService.deleteStudent(id);
+        studentService.deleteStudentById(id);
         return ResponseEntity.ok().build();
     }
 

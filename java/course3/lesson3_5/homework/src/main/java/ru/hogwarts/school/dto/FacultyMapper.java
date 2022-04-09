@@ -18,7 +18,8 @@ public class FacultyMapper {
     @PostConstruct
     private void setupMapper() {
         mapper.createTypeMap(Student.class, StudentDto.class)
-                .addMapping(student -> student.getFaculty().getName(), StudentDto::setFaculty);
+                .addMapping(student -> student.getFaculty().getName(), StudentDto::setFaculty)
+                .addMapping(student -> student.getAvatar().getId(), StudentDto::setAvatar);
     }
 
     public Student toEntity(StudentDto dto) {

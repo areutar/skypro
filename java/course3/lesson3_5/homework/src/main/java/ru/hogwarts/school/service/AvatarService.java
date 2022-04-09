@@ -3,16 +3,16 @@ package ru.hogwarts.school.service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.model.Avatar;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface AvatarService {
-    void uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException;
+    void uploadAvatar(Long id, MultipartFile avatarFile);
 
-    Avatar findAvatar(Long studentId);
+    Avatar getOrCreateAvatar(Long id);
 
-    Avatar getAvatar(Long studentId);
+    Avatar findAvatarById(Long id);
 
     List<Avatar> getAllAvatars();
 
+    void deleteAvatarById(Long id);
 }

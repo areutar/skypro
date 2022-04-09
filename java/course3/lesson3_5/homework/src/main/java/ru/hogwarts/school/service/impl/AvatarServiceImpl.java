@@ -4,27 +4,24 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.hogwarts.school.dto.StudentDto;
-import ru.hogwarts.school.exception.ApiException;
+import ru.hogwarts.school.dto.FacultyMapper;
 import ru.hogwarts.school.exception.NotFoundException;
 import ru.hogwarts.school.exception.UnableToCreateException;
+import ru.hogwarts.school.exception.UnableToDeleteException;
 import ru.hogwarts.school.exception.UnableToUploadFileException;
 import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.AvatarRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.AvatarService;
-import ru.hogwarts.school.service.StudentService;
 
 import javax.transaction.Transactional;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -36,39 +33,56 @@ public class AvatarServiceImpl implements AvatarService {
     private String avatarsDir;
     private final AvatarRepository avatarRepository;
     private final StudentRepository studentRepository;
-    private final StudentService studentService;
+    private final FacultyMapper mapper;
 
     @Override
-    public void uploadAvatar(Long studentId, MultipartFile avatarFile) {
-        StudentDto student = studentService.findStudent(studentId);
+    public void uploadAvatar(Long id, MultipartFile avatarFile) {
+        Student student;
+        try {
+            student = studentRepository.getById(id);
+        } catch (Exception e) {
+            throw new NotFoundException("Student", "id", id, e);
+        }
+
         Path newPath = getNewPath(avatarFile, student);
         copyFile(avatarFile, newPath);
-        fillAndSaveAvatar(avatarFile, studentId, newPath);
+        fillAndSaveAvatar(avatarFile, student, newPath);
     }
 
     @Override
-    public Avatar findAvatar(Long studentId) {
-        return avatarRepository.findAvatarByStudentId(studentId).orElse(new Avatar());
-    }
-
-    @Override
-    public Avatar getAvatar(Long studentId) {
-        Avatar avatar = avatarRepository.getAvatarByStudentId(studentId);
-        if (avatar == null) {
-            throw new NotFoundException("Avatar for Student", "studentId", studentId);
+    public void deleteAvatarById(Long id) {
+        Optional<Avatar> avatar = avatarRepository.findById(id);
+        try {
+            avatarRepository.deleteById(id);
+            Files.deleteIfExists(Path.of(avatar.get().getFilePath()));
+        } catch (RuntimeException | IOException e) {
+            throw new UnableToDeleteException("Avatar", "id", id, e);
         }
-        return avatar;
     }
 
-    private Path getNewPath(MultipartFile avatarFile, StudentDto student) {
+    @Override
+    public Avatar getOrCreateAvatar(Long id) {
+        return avatarRepository.findById(id).orElse(new Avatar());
+    }
+
+    @Override
+    public Avatar findAvatarById(Long id) {
+        try {
+            return avatarRepository.getById(id);
+        } catch (Exception e) {
+            throw new NotFoundException("Avatar for Student", "id", id, e);
+        }
+    }
+
+    private Path getNewPath(MultipartFile avatarFile, Student student) {
         Path filePath;
         try {
-            filePath = Path.of(avatarsDir, student + "." +
+            filePath = Path.of(avatarsDir, mapper.toDto(student) + "." +
                     getExtension(Objects.requireNonNull(avatarFile.getOriginalFilename())));
             Files.createDirectories(filePath.getParent());
             Files.deleteIfExists(filePath);
         } catch (Exception e) {
-            throw new UnableToUploadFileException(ApiException.UNABLE_TO_UPLOAD, e);
+            throw new UnableToUploadFileException(e);
         }
         return filePath;
     }
@@ -82,13 +96,12 @@ public class AvatarServiceImpl implements AvatarService {
         ) {
             bis.transferTo(bos);
         } catch (Exception e) {
-            throw new UnableToUploadFileException(ApiException.UNABLE_TO_UPLOAD, e);
+            throw new UnableToUploadFileException(e);
         }
     }
 
-    private void fillAndSaveAvatar(MultipartFile avatarFile, Long studentId, Path filePath) {
-        Avatar avatar = findAvatar(studentId);
-        Student student = studentRepository.findById(studentId).get();
+    private void fillAndSaveAvatar(MultipartFile avatarFile, Student student, Path filePath) {
+        Avatar avatar = getOrCreateAvatar(student.getId());
         avatar.setStudent(student);
         avatar.setFilePath(filePath.toString());
         avatar.setFileSize(avatarFile.getSize());
@@ -98,7 +111,7 @@ public class AvatarServiceImpl implements AvatarService {
             avatar.setData(avatarFile.getBytes());
             avatarRepository.save(avatar);
         } catch (Exception e) {
-            throw new UnableToCreateException(ApiException.UNABLE_TO_CREATE, e);
+            throw new UnableToCreateException(e);
         }
     }
 
@@ -110,4 +123,5 @@ public class AvatarServiceImpl implements AvatarService {
     public List<Avatar> getAllAvatars() {
         return avatarRepository.findAll();
     }
+
 }

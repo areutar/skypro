@@ -7,7 +7,7 @@ import java.util.logging.Level;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class UnableToUploadFileException extends ApiException {
-    public UnableToUploadFileException(String message, Throwable cause) {
-        super(message + " cause " + cause.getMessage(), Level.SEVERE);
+    public UnableToUploadFileException(Throwable cause) {
+        super(ApiException.UNABLE_TO_UPLOAD, cause, Level.SEVERE);
     }
 }

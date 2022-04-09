@@ -1,18 +1,19 @@
 package ru.hogwarts.school.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.Size;
-import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor
+@ToString
 public class Faculty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,9 +24,5 @@ public class Faculty {
 
     @Size(min = 2, max = 30)
     private String color;
-
-    @OneToMany(mappedBy = "faculty")
-    @JsonIgnore
-    private Set<Student> students;
 
 }

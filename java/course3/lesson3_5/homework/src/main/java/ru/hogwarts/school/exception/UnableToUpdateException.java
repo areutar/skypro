@@ -7,7 +7,7 @@ import java.util.logging.Level;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class UnableToUpdateException extends ApiException {
-    public UnableToUpdateException(String message, Throwable cause) {
-        super(message + " cause " + cause.getMessage(), Level.SEVERE);
+    public UnableToUpdateException(Throwable cause) {
+        super(UNABLE_TO_UPDATE, cause, Level.SEVERE);
     }
 }

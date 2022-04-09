@@ -22,8 +22,7 @@ public class Avatar {
     @JsonIgnore
     private byte[] data;
 
-    @OneToOne
-    // todo correct remove avatar-student
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @MapsId
     @JoinColumn(name = "id")
     @JsonIgnore

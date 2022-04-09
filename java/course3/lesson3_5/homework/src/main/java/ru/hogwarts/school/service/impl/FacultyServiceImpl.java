@@ -8,54 +8,53 @@ import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.Collection;
-import java.util.Optional;
 
-import static ru.hogwarts.school.exception.ApiException.*;
+import static ru.hogwarts.school.exception.ApiException.ALL_FIELDS_ARE_NULL;
 
 @Service
 @RequiredArgsConstructor
 public class FacultyServiceImpl implements FacultyService {
-    private final FacultyRepository repository;
+    private final FacultyRepository facultyRepository;
 
     @Override
     public Faculty createFaculty(Faculty faculty) {
         try {
-            return repository.save(faculty);
+            return facultyRepository.save(faculty);
         } catch (RuntimeException e) {
-            throw new UnableToCreateException(UNABLE_TO_CREATE, e);
+            throw new UnableToCreateException(e);
         }
     }
 
     @Override
     public Faculty editFaculty(Faculty faculty) {
         try {
-            return repository.save(faculty);
+            return facultyRepository.save(faculty);
         } catch (RuntimeException e) {
-            throw new UnableToUpdateException(UNABLE_TO_UPDATE, e);
+            throw new UnableToUpdateException(e);
         }
     }
 
     @Override
     public void deleteFaculty(long id) {
         try {
-            repository.deleteById(id);
+            facultyRepository.deleteById(id);
         } catch (RuntimeException e) {
-            throw new UnableToDeleteException("Faculty", "id", id);
+            throw new UnableToDeleteException("Faculty", "id", id, e);
         }
     }
 
     @Override
     public Faculty findFaculty(long id) {
-        Optional<Faculty> optionalFaculty = repository.findById(id);
-        if (optionalFaculty.isEmpty()) {
-            throw new NotFoundException("Faculty", "id", id);
+        try {
+            return facultyRepository.getById(id);
+        } catch (Exception e) {
+            throw new NotFoundException("Faculty", "id", id, e);
         }
-        return optionalFaculty.get();
     }
 
     @Override
     public Collection<Faculty> getAllFaculties() {
-        return repository.findAll();
+        return facultyRepository.findAll();
     }
 
     @Override
@@ -65,9 +64,9 @@ public class FacultyServiceImpl implements FacultyService {
         }
 
         if (name != null) {
-            return repository.findFacultiesByNameIgnoreCase(name);
+            return facultyRepository.findFacultiesByNameIgnoreCase(name);
         } else {
-            return repository.findFacultiesByColorIgnoreCase(color);
+            return facultyRepository.findFacultiesByColorIgnoreCase(color);
         }
     }
 

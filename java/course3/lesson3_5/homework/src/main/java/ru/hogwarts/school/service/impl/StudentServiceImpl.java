@@ -6,25 +6,21 @@ import ru.hogwarts.school.configuration.MapperConfiguration;
 import ru.hogwarts.school.dto.FacultyMapper;
 import ru.hogwarts.school.dto.StudentDto;
 import ru.hogwarts.school.exception.*;
-import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
-import ru.hogwarts.school.repository.AvatarRepository;
 import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.List;
-import java.util.Optional;
 
-import static ru.hogwarts.school.exception.ApiException.*;
+import static ru.hogwarts.school.exception.ApiException.FIRST_AGE_MORE_THAN_SECOND_ERROR;
 
 @Service
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     private final FacultyRepository facultyRepository;
-    private final AvatarRepository avatarRepository;
     private final FacultyMapper mapper;
 
     @Override
@@ -35,7 +31,19 @@ public class StudentServiceImpl implements StudentService {
             student.setFaculty(faculty);
             return mapper.toDto(studentRepository.save(student));
         } catch (RuntimeException e) {
-            throw new UnableToCreateException(UNABLE_TO_CREATE, e);
+            throw new UnableToCreateException(e);
+        }
+    }
+
+    @Override
+    public StudentDto addStudentToFaculty(StudentDto studentDto, Long faculty_id) {
+        try {
+            Faculty faculty = facultyRepository.getById(faculty_id);
+            Student student = mapper.toEntity(studentDto);
+            student.setFaculty(faculty);
+            return mapper.toDto(studentRepository.save(student));
+        } catch (RuntimeException e) {
+            throw new NotFoundException("Faculty", "id", faculty_id, e);
         }
     }
 
@@ -47,30 +55,28 @@ public class StudentServiceImpl implements StudentService {
             student.setFaculty(faculty);
             return mapper.toDto(studentRepository.save(student));
         } catch (RuntimeException e) {
-            throw new UnableToUpdateException(UNABLE_TO_UPDATE, e);
+            throw new UnableToUpdateException(e);
         }
     }
 
     @Override
-    public void deleteStudent(long id) {
+//    @Transactional
+    public void deleteStudentById(long id) {
         try {
-            Optional<Avatar> avatar = avatarRepository.findById(id);
-            if (avatar.isPresent()) {
-                avatarRepository.deleteById(id);
-            }
             studentRepository.deleteById(id);
         } catch (RuntimeException e) {
-            throw new UnableToDeleteException("Student", "id", id);
+            throw new UnableToDeleteException("Student", "id", id, e);
         }
     }
 
     @Override
     public StudentDto findStudent(long id) {
-        Optional<Student> optionalStudent = studentRepository.findById(id);
-        if (optionalStudent.isEmpty()) {
-            throw new NotFoundException("Student", "id", id);
+        try {
+            Student student = studentRepository.getById(id);
+            return mapper.toDto(student);
+        } catch (Exception e) {
+            throw new NotFoundException("Student", "id", id, e);
         }
-        return mapper.toDto(optionalStudent.get());
     }
 
     @Override
@@ -94,4 +100,5 @@ public class StudentServiceImpl implements StudentService {
         return MapperConfiguration.convertList(
                 studentRepository.findByAgeBetween(min, max), mapper::toDto);
     }
+
 }

@@ -21,10 +21,23 @@ public class Student {
     @Max(65)
     private int age;
 
-    @ManyToOne
-    @JoinColumn(name = "faculty_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
     private Faculty faculty;
 
-    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "student",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
     private Avatar avatar;
+
+    public void setAvatar(Avatar avatar) {
+        if (avatar == null) {
+            if (this.avatar != null) {
+                this.avatar.setStudent(null);
+            }
+        } else {
+            avatar.setStudent(this);
+        }
+        this.avatar = avatar;
+    }
 }
