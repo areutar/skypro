@@ -7,6 +7,8 @@ import java.util.Collection;
 public interface StudentService {
     Student createStudent(Student student);
 
+    Student addStudentToFaculty(Student student, Long faculty_id);
+
     Student findStudent(long id);
 
     Student editStudent(Student student);

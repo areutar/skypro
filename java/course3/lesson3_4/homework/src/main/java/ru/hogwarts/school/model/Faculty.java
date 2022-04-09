@@ -2,17 +2,16 @@ package ru.hogwarts.school.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 public class Faculty {
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Size(min = 2, max = 30)
     private String name;
@@ -20,8 +19,8 @@ public class Faculty {
     @Size(min = 2, max = 30)
     private String color;
 
-    @OneToMany(mappedBy = "faculty")
-    private Set<Student> students;
+//    @OneToMany(mappedBy = "faculty")
+//    private Set<Student> students;
 
     public Long getId() {
         return id;

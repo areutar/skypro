@@ -1,5 +1,7 @@
 package ru.hogwarts.school.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -9,19 +11,20 @@ import java.util.Objects;
 @Entity
 public class Student {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Min(0)
     private Long id;
 
-    @Size(min=2, max=30)
+    @Size(min = 2, max = 30)
     private String name;
 
     @Min(9)
     @Max(65)
     private int age;
 
-    @ManyToOne
-    @JoinColumn(name = "faculty_id")
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "faculty_id")
     private Faculty faculty;
 
     public Faculty getFaculty() {
