@@ -80,7 +80,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Collection<Student> getLastFifeStudents() {
-        return repository.getLastFifeStudents();
+    public Collection<Student> getLastStudents(Integer number) {
+        return repository.getLastFifeStudents(number);
     }
 }

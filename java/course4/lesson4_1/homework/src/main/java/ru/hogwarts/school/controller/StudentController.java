@@ -53,18 +53,18 @@ public class StudentController {
         return studentService.findByAgeBetween(min, max);
     }
 
-    @GetMapping("/students_count")
+    @GetMapping("/students/count")
     public Integer getStudentsCount() {
         return studentService.getStudentsCount();
     }
 
-    @GetMapping("/students_average_ages")
+    @GetMapping("/students/average_ages")
     public Float getAverageAgesStudents() {
         return studentService.getStudentsAgesAverage();
     }
 
-    @GetMapping("/students_last_fife")
-    public Collection<Student> getLastFifeStudents() {
-        return studentService.getLastFifeStudents();
+    @GetMapping("/students/last")
+    public Collection<Student> getLastFifeStudents(@RequestParam Integer number) {
+        return studentService.getLastStudents(number);
     }
 }

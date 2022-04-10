@@ -23,6 +23,5 @@ public interface StudentService {
 
     Float getStudentsAgesAverage();
 
-    Collection<Student> getLastFifeStudents();
-
+    Collection<Student> getLastStudents(Integer number);
 }
