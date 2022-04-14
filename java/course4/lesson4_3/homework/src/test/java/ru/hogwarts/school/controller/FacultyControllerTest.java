@@ -20,14 +20,13 @@ import ru.hogwarts.school.service.impl.FacultyServiceImpl;
 import ru.hogwarts.school.service.impl.StudentServiceImpl;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
-import static ru.hogwarts.school.constant.Constant.*;
+import static ru.hogwarts.school.constant.Constants.*;
 
 @WebMvcTest
 class FacultyControllerTest {
@@ -102,7 +101,7 @@ class FacultyControllerTest {
 
     @Test
     void getFacultyInfo() throws Exception {
-        when(facultyRepository.findById(ID_ONE)).thenReturn(Optional.of(FACULTY_ONE));
+        when(facultyRepository.getById(ID_ONE)).thenReturn(FACULTY_ONE);
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/faculty/{id}", ID_ONE)
                         .accept(MediaType.APPLICATION_JSON)

@@ -4,7 +4,7 @@ import ru.hogwarts.school.model.Faculty;
 
 import java.util.List;
 
-public class Constant {
+public class Constants {
     public static final String LOCAL_HOST = "http://localhost:";
     public static final String GOOD_NAME1 = "GOODFIRSTNAMEONe";
     public static final String GOOD_NAME2 = "goodnametwo";

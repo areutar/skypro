@@ -11,6 +11,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import ru.hogwarts.school.dto.StudentDto;
+import ru.hogwarts.school.dto.StudentMapper;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
@@ -19,7 +21,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static ru.hogwarts.school.constant.Constant.*;
+import static ru.hogwarts.school.constant.Constants.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = {"spring.sql.init.mode=NEVER", "spring.jpa.hibernate.ddl-auto=create-drop"})
@@ -33,6 +35,9 @@ class StudentControllerTest {
 
     @Autowired
     private StudentRepository repository;
+
+    @Autowired
+    private StudentMapper mapper;
 
     private Student dummy;
 
@@ -48,8 +53,8 @@ class StudentControllerTest {
 
     @Test
     void whenCreateGoodStudentThanOk() {
-        ResponseEntity<Student> responseEntity =
-                restTemplate.postForEntity(REQUEST_URI, dummy, Student.class);
+        ResponseEntity<StudentDto> responseEntity =
+                restTemplate.postForEntity(REQUEST_URI, dummy, StudentDto.class);
 
         assert responseEntity.getBody() != null : "Body is null!";
 
@@ -64,9 +69,10 @@ class StudentControllerTest {
         Student student2 = createStudent(GOOD_NAME2, GOOD_AGE2);
         student2.setId(dummy.getId());
 
-        HttpEntity<Student> entity = new HttpEntity<>(student2);
-        ResponseEntity<Student> responseEntity =
-                restTemplate.exchange(REQUEST_URI, HttpMethod.PUT, entity, Student.class);
+        HttpEntity<StudentDto> entity = new HttpEntity<>(mapper.toDto(student2));
+        System.out.println(mapper.toDto(student2));
+        ResponseEntity<StudentDto> responseEntity =
+                restTemplate.exchange(REQUEST_URI, HttpMethod.PUT, entity, StudentDto.class);
         assert responseEntity.getBody() != null : "Body is null!";
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -77,8 +83,8 @@ class StudentControllerTest {
 
     @Test
     void whenGetPresentStudentInfoThanOk() {
-        ResponseEntity<Student> responseEntity =
-                restTemplate.getForEntity(REQUEST_URI + "/{id}", Student.class, dummy.getId());
+        ResponseEntity<StudentDto> responseEntity =
+                restTemplate.getForEntity(REQUEST_URI + "/{id}", StudentDto.class, dummy.getId());
         assert responseEntity.getBody() != null : "Body is null!";
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -114,14 +120,14 @@ class StudentControllerTest {
 
     @Test
     void whenGetAllStudentsThanContainsNewAddedStudent() {
-        ResponseEntity<List<Student>> responseEntity =
+        ResponseEntity<List<StudentDto>> responseEntity =
                 restTemplate.exchange(REQUEST_URI,
                         HttpMethod.GET,
                         null,
                         new ParameterizedTypeReference<>() {
                         });
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        List<Student> students = Objects.requireNonNull(responseEntity.getBody());
+        List<StudentDto> students = Objects.requireNonNull(responseEntity.getBody());
 
         assertThat(students.get(students.size() - 1).getName()).isEqualTo(GOOD_NAME1);
         assertThat(students.get(students.size() - 1).getAge()).isEqualTo(GOOD_AGE1);
@@ -131,14 +137,14 @@ class StudentControllerTest {
     @Test
     void whenFindStudentsByAgeThanContainsKnownStudent() {
         int age = dummy.getAge();
-        ResponseEntity<List<Student>> responseEntity =
+        ResponseEntity<List<StudentDto>> responseEntity =
                 restTemplate.exchange(REQUEST_URI + "/age/{age}",
                         HttpMethod.GET,
                         null,
                         new ParameterizedTypeReference<>() {
                         },
                         age);
-        List<Student> students = Objects.requireNonNull(responseEntity.getBody());
+        List<StudentDto> students = Objects.requireNonNull(responseEntity.getBody());
 
         assertThat(students.get(students.size() - 1).getName()).isEqualTo(GOOD_NAME1);
         students.forEach(student1 -> assertThat(student1.getAge()).isEqualTo(GOOD_AGE1));
@@ -148,14 +154,14 @@ class StudentControllerTest {
 
     @Test
     void whenFindStudentsByAgeBetweenMinAndMaxShouldContainsKnownStudent() {
-        ResponseEntity<List<Student>> responseEntity =
+        ResponseEntity<List<StudentDto>> responseEntity =
                 restTemplate.exchange(REQUEST_URI + "/age?min={min}&max={max}",
                         HttpMethod.GET,
                         null,
                         new ParameterizedTypeReference<>() {
                         },
                         MIN_AGE, MAX_AGE);
-        List<Student> students = responseEntity.getBody();
+        List<StudentDto> students = responseEntity.getBody();
         assert students != null : "Body is null!";
 
         assertThat(students.get(students.size() - 1).getName()).isEqualTo(GOOD_NAME1);
