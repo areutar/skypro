@@ -9,4 +9,5 @@ public interface UserService {
     TelegramUser findUserByChatId(Long chatId);
 
     void updateUserName(Update update);
+
 }

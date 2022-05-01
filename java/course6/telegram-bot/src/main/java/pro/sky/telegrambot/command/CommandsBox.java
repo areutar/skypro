@@ -52,4 +52,5 @@ public class CommandsBox {
         return commands.getOrDefault(CommandNames.valueOfCommandName(commandName),
                 commands.get(CommandNames.UNKNOWN));
     }
+
 }

@@ -26,4 +26,5 @@ public final class ParsingUtil {
     public static String formatTime(LocalDateTime localDateTime) {
         return localDateTime.format(formatter);
     }
+
 }

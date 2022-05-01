@@ -15,4 +15,5 @@ public class NotificationConst {
     public static final String SAVED_FAIL = "Не удалось сохранить такое напоминание";
     public static final String BAD_REQUST =
             "Не хватает данных для создания напоминания или они введены в неправильном формате";
+
 }

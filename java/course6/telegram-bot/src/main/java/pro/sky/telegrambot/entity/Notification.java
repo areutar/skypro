@@ -35,4 +35,5 @@ public class Notification {
     public String toString() {
         return String.format("<b>Напоминание №%d</b> %s %s", number, formatTime(time), text);
     }
+
 }

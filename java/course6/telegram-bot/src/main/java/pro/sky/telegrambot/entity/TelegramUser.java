@@ -15,5 +15,4 @@ public class TelegramUser {
     private Long chatId;
     private Long notificationsNumber;
     private String name;
-
 }

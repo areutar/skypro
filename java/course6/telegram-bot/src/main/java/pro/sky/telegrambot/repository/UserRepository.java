@@ -5,4 +5,5 @@ import pro.sky.telegrambot.entity.TelegramUser;
 
 public interface UserRepository extends JpaRepository<TelegramUser, Long> {
     TelegramUser getTelegramUserByChatId(Long chatId);
+
 }
