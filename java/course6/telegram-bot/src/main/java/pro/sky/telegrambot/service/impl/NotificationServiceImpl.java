@@ -84,7 +84,8 @@ public class NotificationServiceImpl implements NotificationService {
         }
 
         Long number = Long.parseLong(strings[0]);
-        Optional<Notification> notificationOptional = repository.findNotificationByNumber(number);
+        Optional<Notification> notificationOptional =
+                repository.findNotificationByNumberAndUser_ChatId(number, getChatId(update));
         if (notificationOptional.isEmpty()) {
             return String.format("%s - %s", input, WRONG_NUMBER);
         }
@@ -124,7 +125,8 @@ public class NotificationServiceImpl implements NotificationService {
         }
 
         Long number = Long.parseLong(input);
-        Optional<Notification> notificationOptional = repository.findNotificationByNumber(number);
+        Optional<Notification> notificationOptional =
+                repository.findNotificationByNumberAndUser_ChatId(number, getChatId(update));
 
         if (notificationOptional.isEmpty()) {
             return String.format("%s - %s", input, WRONG_NUMBER);

@@ -21,7 +21,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
             nativeQuery = true)
     List<Notification> getCurrentNotifications();
 
-    Optional<Notification> findNotificationByNumber(Long number);
+    Optional<Notification> findNotificationByNumberAndUser_ChatId(Long number, Long chatId);
 
 
     // not working
