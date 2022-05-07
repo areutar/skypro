@@ -43,8 +43,7 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public void uploadAvatar(Long id, MultipartFile avatarFile) {
-        log.info(new Object() {
-        }.getClass().getEnclosingMethod().getName() + CREATED);
+        log.info(getCurrentMethodName() + CREATED);
 
         Student student;
         try {
@@ -60,8 +59,7 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public void deleteAvatarById(Long id) {
-        log.info(new Object() {
-        }.getClass().getEnclosingMethod().getName() + CREATED);
+        log.info(getCurrentMethodName() + CREATED);
 
         Optional<Avatar> avatar = avatarRepository.findById(id);
         try {
@@ -74,16 +72,14 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public Avatar getOrCreateAvatar(Long id) {
-        log.info(new Object() {
-        }.getClass().getEnclosingMethod().getName() + CREATED);
+        log.info(getCurrentMethodName() + CREATED);
 
         return avatarRepository.findById(id).orElse(new Avatar());
     }
 
     @Override
     public Avatar findAvatarById(Long id) {
-        log.info(new Object() {
-        }.getClass().getEnclosingMethod().getName() + CREATED);
+        log.info(getCurrentMethodName() + CREATED);
 
         try {
             return avatarRepository.getById(id);
@@ -94,17 +90,15 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public List<Avatar> getAllAvatars(int pageNumber, int pageSize) {
-        log.info(new Object() {
-        }.getClass().getEnclosingMethod().getName() + CREATED);
-
+        log.info(getCurrentMethodName() + CREATED);
+        //todo add check for invalid page number
         PageRequest pageRequest = PageRequest.of(--pageNumber, pageSize,
                 Sort.Direction.ASC, "fileSize");
         return avatarRepository.findAll(pageRequest).getContent();
     }
 
     private Path getNewPath(MultipartFile avatarFile, Student student) {
-        log.info(new Object() {
-        }.getClass().getEnclosingMethod().getName() + CREATED);
+        log.info(getCurrentMethodName() + CREATED);
 
         Path filePath;
         try {
@@ -119,8 +113,7 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     private void copyFile(MultipartFile avatarFile, Path filePath) {
-        log.info(new Object() {
-        }.getClass().getEnclosingMethod().getName() + CREATED);
+        log.info(getCurrentMethodName() + CREATED);
 
         try (
                 InputStream is = avatarFile.getInputStream();
@@ -135,8 +128,7 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     private void fillAndSaveAvatar(MultipartFile avatarFile, Student student, Path filePath) {
-        log.info(new Object() {
-        }.getClass().getEnclosingMethod().getName() + CREATED);
+        log.info(getCurrentMethodName() + CREATED);
 
         Avatar avatar = getOrCreateAvatar(student.getId());
         avatar.setStudent(student);
@@ -156,5 +148,11 @@ public class AvatarServiceImpl implements AvatarService {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
+    public static String getCurrentMethodName() {
+        return StackWalker.getInstance()
+                .walk(s -> s.skip(1).findFirst())
+                .get()
+                .getMethodName();
+    }
 
 }
