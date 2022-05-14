@@ -78,8 +78,18 @@ public class StudentController {
         return studentService.getLastStudents(number);
     }
 
-    @GetMapping("/start/{X}")
-    public List<String> getStudentsBeginWithLetter(@PathVariable Character X) {
-        return studentService.getStudentsBeginWithLetter(X);
+    @GetMapping("/start/{firstChar}")
+    public List<String> getStudentsBeginWithLetter(@PathVariable Character firstChar) {
+        return studentService.getStudentsBeginWithLetter(firstChar);
+    }
+
+    @GetMapping("/print1")
+    public void printStudentsWithThreads1() {
+        studentService.printStudentsWithThreads1();
+    }
+
+    @GetMapping("/print2")
+    public void printStudentsWithThreads2() {
+        studentService.printStudentsWithThreads2();
     }
 }

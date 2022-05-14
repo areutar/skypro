@@ -101,16 +101,14 @@ public class StudentServiceImpl implements StudentService {
     public List<StudentDto> getAllStudents() {
         log.info(getCurrentMethodName() + CREATED);
 
-        return MapperConfiguration.convertList(
-                studentRepository.findAll(), mapper::toDto);
+        return MapperConfiguration.convertList(studentRepository.findAll(), mapper::toDto);
     }
 
     @Override
     public List<StudentDto> findByAge(int age) {
         log.info(getCurrentMethodName() + CREATED);
 
-        return MapperConfiguration.convertList(
-                studentRepository.findByAge(age), mapper::toDto);
+        return MapperConfiguration.convertList(studentRepository.findByAge(age), mapper::toDto);
     }
 
     @Override
@@ -120,8 +118,7 @@ public class StudentServiceImpl implements StudentService {
         if (max < min) {
             throw new BadRequestException(FIRST_AGE_MORE_THAN_SECOND_ERROR);
         }
-        return MapperConfiguration.convertList(
-                studentRepository.findByAgeBetween(min, max), mapper::toDto);
+        return MapperConfiguration.convertList(studentRepository.findByAgeBetween(min, max), mapper::toDto);
     }
 
     @Override
@@ -142,31 +139,81 @@ public class StudentServiceImpl implements StudentService {
     public double getStudentsAgesAverage2() {
         log.info(getCurrentMethodName() + CREATED);
 
-        return studentRepository.findAll()
-                .stream()
-                .mapToInt(Student::getAge)
-                .average()
-                .orElse(0);
+        return studentRepository.findAll().stream().mapToInt(Student::getAge).average().orElse(0);
     }
 
     @Override
     public List<StudentDto> getLastStudents(Integer number) {
         log.info(getCurrentMethodName() + CREATED);
 
-        return MapperConfiguration.convertList(
-                studentRepository.getLastStudents(number), mapper::toDto);
+        return MapperConfiguration.convertList(studentRepository.getLastStudents(number), mapper::toDto);
     }
 
     @Override
     public List<String> getStudentsBeginWithLetter(Character firstChar) {
         log.info(getCurrentMethodName() + CREATED);
 
-        return studentRepository.findAll()
-                .stream()
-                .filter(student -> student.getName().startsWith(String.valueOf(firstChar)))
-                .map(student -> student.getName().toUpperCase())
-                .sorted()
-                .collect(Collectors.toList());
+        return studentRepository.findAll().stream().filter(student -> student.getName().startsWith(String.valueOf(firstChar))).map(student -> student.getName().toUpperCase()).sorted().collect(Collectors.toList());
     }
 
+    /* если убрать засыпание потоков, то, практически, всегда список будет напечатан правильно, что
+     "слегка противоречит требованиям задания"*/
+    @Override
+    public void printStudentsWithThreads1() {
+        List<Student> students = studentRepository.findAll();
+        printTwoStudentsNames(students.get(0), students.get(1));
+
+        Thread thread1 = new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                printTwoStudentsNames(students.get(2), students.get(3));
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+        thread1.start();
+
+        Thread thread2 = new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                printTwoStudentsNames(students.get(4), students.get(5));
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+        thread2.start();
+    }
+
+    @Override
+    public void printStudentsWithThreads2() {
+        List<Student> students = studentRepository.findAll();
+        printStudent(students.get(0));
+        printStudent(students.get(1));
+
+        Thread thread1 = new Thread(() -> {
+            printStudent(students.get(2));
+            printStudent(students.get(3));
+        });
+        thread1.start();
+        try {
+            thread1.join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        Thread thread2 = new Thread(() -> {
+            printStudent(students.get(4));
+            printStudent(students.get(5));
+        });
+        thread2.start();
+    }
+
+    private synchronized void printStudent(Student student) {
+        System.out.println(student.getName());
+    }
+
+    private void printTwoStudentsNames(Student student1, Student student2) {
+        System.out.println(student1.getName());
+        System.out.println(student2.getName());
+    }
 }
