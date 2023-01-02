@@ -31,4 +31,7 @@ public interface StudentService {
 
     StudentDto addStudentToFaculty(StudentDto studentDto, Long faculty_id);
 
+    void printStudentsWithThreads1();
+
+    void printStudentsWithThreads2();
 }
