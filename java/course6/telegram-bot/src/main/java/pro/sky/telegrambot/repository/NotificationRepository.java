@@ -23,7 +23,6 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
     Optional<Notification> findNotificationByNumber(Long number);
 
-
     // not working
     @Query(value = "select n from Notification n join TelegramUser u " +
             "on n.user.chatId=u.chatId " +

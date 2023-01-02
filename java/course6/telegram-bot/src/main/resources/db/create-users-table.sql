@@ -11,5 +11,6 @@ create table users
     notifications_number bigint default 0
 );
 
+
 alter table users
     owner to "myUser";

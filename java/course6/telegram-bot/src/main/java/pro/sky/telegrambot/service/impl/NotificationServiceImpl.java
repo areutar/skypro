@@ -135,7 +135,6 @@ public class NotificationServiceImpl implements NotificationService {
         } catch (Exception e) {
             return DELETE_FAIL;
         }
-
         return DELETE_OK;
     }
 

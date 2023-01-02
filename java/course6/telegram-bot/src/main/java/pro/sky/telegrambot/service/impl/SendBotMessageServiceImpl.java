@@ -42,5 +42,4 @@ public class SendBotMessageServiceImpl implements SendBotMessageService {
     public void scheduledSendMessages() {
         sendMessages(notificationService.getCurrentNotifications());
     }
-
 }

@@ -34,4 +34,5 @@ public class UserServiceImpl implements UserService {
         TelegramUser user = repository.getTelegramUserByChatId(getChatId(update));
         user.setName(getUserName(update));
     }
+
 }

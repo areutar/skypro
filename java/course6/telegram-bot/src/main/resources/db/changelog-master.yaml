@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: db/create-users-table.sql
+  - include:
+      file: db/create-notification-table.sql

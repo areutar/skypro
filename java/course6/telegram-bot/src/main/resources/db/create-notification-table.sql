@@ -14,6 +14,7 @@ create table notification_task
        number  bigint
 );
 
+
 create index notification_task_time_idx on notification_task(time);
 
 alter table notification_task

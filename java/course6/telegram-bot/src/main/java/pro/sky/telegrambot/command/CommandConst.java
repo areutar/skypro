@@ -40,4 +40,5 @@ public class CommandConst {
     public static final String UNKNOWN_MESSAGE =
             "<b>Нет такой команды!</b> Используйте /help, чтобы получить список доступных команд.";
     public static final String NEW_LINE = System.lineSeparator();
+
 }

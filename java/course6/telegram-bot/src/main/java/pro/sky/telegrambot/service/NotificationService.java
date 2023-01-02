@@ -17,4 +17,5 @@ public interface NotificationService {
     String findAllNotifications(Update update);
 
     List<Notification> getCurrentNotifications();
+
 }

@@ -37,6 +37,4 @@ public class NotificationUtils {
     public static String inputCleardOfCommand(CommandNames command, Update update) {
         return getMessage(update).substring(command.getLength()).trim();
     }
-
-
 }

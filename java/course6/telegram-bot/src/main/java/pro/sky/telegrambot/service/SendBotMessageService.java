@@ -10,4 +10,5 @@ public interface SendBotMessageService {
     void sendMessages(List<Notification> notifications);
 
     void scheduledSendMessages();
+
 }
